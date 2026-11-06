@@ -36,6 +36,7 @@ variable "ssh_become" {
 variable "openvox_version" {
   type        = string
   default     = "9.2.1"
+  nullable    = false
   description = "openvox-agent release to install, from https://github.com/OpenVoxProject/openvox/releases. Change it with checksums."
 
   validation {
@@ -47,6 +48,7 @@ variable "openvox_version" {
 variable "checksums" {
   type        = map(string)
   description = "SHA-256 of the package for each platform, by \"PLATFORM/VERSION/ARCH\". Change these with openvox_version."
+  nullable    = false
   default = {
     "ubuntu/24.04/x86_64"  = "83225030da8f2c94a649318f7f02ca9ddc01919446ae5ec04dcb1e9d1343f58e"
     "ubuntu/24.04/aarch64" = "1f600b2b194ad4fb199b13228fdfbfe29dde1e5e0b2dfba42b578c06c6b6a907"
