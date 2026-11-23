@@ -148,8 +148,8 @@ circuit "openvox" {
   }
 
   step "reload" {
-    command {
-      command = "systemctl daemon-reload"
+    service_action {
+      action = "daemon-reload"
       triggers = {
         service = local.applies ? sha256(local.service_content) : ""
         timer   = var.schedule != null ? sha256(local.timer_content) : ""

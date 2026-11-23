@@ -100,7 +100,7 @@ OpenVox also publishes Ubuntu 22.04 and 26.04, Debian 12, and Enterprise Linux 8
 
 ## Requirements
 
-Requires Conn3x v0.6.9 or later and systemd on each host, on x86_64 or aarch64. Each host needs to reach `apt.voxpupuli.org` or `yum.voxpupuli.org`. Applying needs no inbound port.
+Requires Conn3x v0.29.0 or later and systemd on each host, on x86_64 or aarch64. Each host needs to reach `apt.voxpupuli.org` or `yum.voxpupuli.org`. Applying needs no inbound port.
 
 ## Tested on
 
