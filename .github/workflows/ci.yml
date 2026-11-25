@@ -90,7 +90,7 @@ jobs:
       # A fresh host gets the previous release, then the circuit's own pin is
       # applied over it, the way someone raises openvox_version. Only the
       # x86_64 packages CI runs on are listed.
-      - name: Upgrade from OpenVox 9.2.0 on a fresh host, then plan again with no changes
+      - name: Upgrade from OpenVox 9.2.1 on a fresh host, then plan again with no changes
         working-directory: examples/local
         env:
           CONTAINERFILE: ${{ github.workspace }}/conn3x/test/images/${{ matrix.distro }}/Containerfile
@@ -99,15 +99,15 @@ jobs:
           ./down.sh
           ./up.sh
           conn3x init
-          ubuntu=fb324fc165bec131e916147797dbbaad42c5fcfb0f2fe84c471590d219f48bce
-          debian=b9879b33b131bea4dbced8bd171b43db349947b9ff8c4c5c7c84b655255d9e04
-          el=10f2f0c627097dffa05c5860cdf9e0803688f77409d1ef0c25c899ad6fd5a8ea
-          conn3x apply -auto-approve -var openvox_version=9.2.0 \
+          ubuntu=83225030da8f2c94a649318f7f02ca9ddc01919446ae5ec04dcb1e9d1343f58e
+          debian=352e3cdc724579d62c059e9f76dc6e6f3067516de1428bea178d57a27cfc7280
+          el=c55617f8c34f482e373b9037456879063c5cfafa9c3f18b7372d6bd23af129ca
+          conn3x apply -auto-approve -var openvox_version=9.2.1 \
             -var "checksums={\"ubuntu/24.04/x86_64\"=\"$ubuntu\", \"debian/13/x86_64\"=\"$debian\", \"el/10/x86_64\"=\"$el\"}"
-          [ "$(sudo podman exec circuit-openvox /opt/puppetlabs/bin/puppet --version)" = 9.2.0 ]
+          [ "$(sudo podman exec circuit-openvox /opt/puppetlabs/bin/puppet --version)" = 9.2.1 ]
           conn3x apply -auto-approve
           conn3x plan -detailed-exitcode
-          [ "$(sudo podman exec circuit-openvox /opt/puppetlabs/bin/puppet --version)" = 9.2.1 ]
+          [ "$(sudo podman exec circuit-openvox /opt/puppetlabs/bin/puppet --version)" = 9.5.0 ]
       - name: Check the upgraded agent applies the manifest
         working-directory: examples/local
         run: sudo podman exec -i circuit-openvox sh -s < check.sh

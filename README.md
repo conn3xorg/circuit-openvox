@@ -20,7 +20,7 @@ OpenVox is not Puppet, and neither OpenVox nor this circuit is affiliated with P
 
 ```hcl
 module "openvox" {
-  source = "github.com/conn3xorg/circuit-openvox?ref=v0.2.0"
+  source = "github.com/conn3xorg/circuit-openvox?ref=v0.2.1"
 
   hosts                = { web1 = "203.0.113.10", web2 = "203.0.113.11" }
   ssh_private_key_file = "~/.ssh/id_ed25519"
@@ -84,8 +84,8 @@ OpenVox also publishes Ubuntu 22.04 and 26.04, Debian 12, and Enterprise Linux 8
 | `ssh_private_key_file` | string | `null` | Path to a private key. When null, Conn3x uses the SSH agent. |
 | `ssh_known_hosts_file` | string | `null` | known_hosts file to check host keys against. When null, `~/.ssh/known_hosts`. Not used for a host object with `host_key`. |
 | `ssh_become` | bool | `false` | Run commands as root through sudo. Set it when `ssh_user` isn't root. |
-| `openvox_version` | string | `"9.2.1"` | [openvox-agent release](https://github.com/OpenVoxProject/openvox/releases) to install. |
-| `checksums` | map(string) | the 9.2.1 packages | SHA-256 of the package, by `PLATFORM/VERSION/ARCH`, such as `debian/13/x86_64`. Change them with `openvox_version`. |
+| `openvox_version` | string | `"9.5.0"` | [openvox-agent release](https://github.com/OpenVoxProject/openvox/releases) to install. |
+| `checksums` | map(string) | the 9.5.0 packages | SHA-256 of the package, by `PLATFORM/VERSION/ARCH`, such as `debian/13/x86_64`. Change them with `openvox_version`. |
 | `manifest_path` | string | `null` | Manifest file, or directory of manifests, on the host to apply. When null, the circuit only installs the agent. |
 | `module_path` | string | `null` | Directories on the host to look for modules in, separated by colons. When null, OpenVox's default, under `/etc/puppetlabs/code`. |
 | `schedule` | string | `null` | systemd `OnCalendar` expression that applies on a timer, such as `"hourly"` or `"*:0/30"`. Needs a `manifest_path`. When null, there's no timer. |
