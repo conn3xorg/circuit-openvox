@@ -169,12 +169,14 @@ circuit "openvox" {
     }
   }
 
-  # systemctl waits for a oneshot unit to finish and fails if it fails, so a
-  # failed run fails the apply, with the detail in the journal.
+  # A start of the oneshot unit waits for the run to finish and fails if it
+  # fails, so a failed run fails the apply, with the detail in the journal.
+  # service_action tries again if systemd re-executes mid-apply.
   step "apply" {
     for_each = local.applies ? toset(["apply"]) : toset([])
-    command {
-      command = "systemctl start openvox-apply.service"
+    service_action {
+      name   = "openvox-apply.service"
+      action = "start"
       triggers = {
         version = var.openvox_version
         service = sha256(local.service_content)
