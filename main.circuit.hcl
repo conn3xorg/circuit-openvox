@@ -85,8 +85,8 @@ circuit "openvox" {
     become           = var.ssh_become
   }
 
-  # findutils and tar are what the package depends on, and dpkg and rpm won't
-  # fetch them. The minimal images leave some of these out.
+  # findutils and tar are what the package depends on. The minimal images
+  # leave some of these out.
   step "packages" {
     for_each = toset(["curl", "findutils", "tar"])
     package {
@@ -108,13 +108,15 @@ circuit "openvox" {
     }
   }
 
-  # Goes straight to dpkg and rpm, so no repository of OpenVox's stays on the
-  # host to move the agent past openvox_version, and --oldpackage lets
-  # openvox_version go down as well as up.
+  # Installs from the checked file with apt-get or dnf, which take findutils
+  # and tar from the host's own repositories. No repository of OpenVox's is
+  # added to move the agent past openvox_version, and an older file
+  # downgrades it.
   step "install" {
-    command {
-      command = data.conn3x_host.facts[each.key].os_family == "debian" ? "dpkg -i ${local.cache_dir}/${local.package[each.key]}" : "rpm -U --oldpackage ${local.cache_dir}/${local.package[each.key]}"
-      unless  = data.conn3x_host.facts[each.key].os_family == "debian" ? "[ \"$(dpkg-query -W -f '$${Version}' openvox-agent 2>/dev/null | cut -d- -f1)\" = ${var.openvox_version} ]" : "[ \"$(rpm -q --qf '%%{VERSION}' openvox-agent 2>/dev/null)\" = ${var.openvox_version} ]"
+    package {
+      name          = "openvox-agent"
+      source        = conn3x_download.openvox__download[each.key].dest
+      source_sha256 = conn3x_download.openvox__download[each.key].sha256
     }
   }
 

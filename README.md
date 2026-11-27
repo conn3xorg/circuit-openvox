@@ -51,7 +51,7 @@ Everything at `manifest_path` and `module_path` runs as root. Keep them writable
 On each host, in order:
 
 1. Installs `curl`, `findutils` and `tar`, then downloads the OpenVox package for the host's distribution and architecture into `/var/cache/conn3x-openvox`, and checks its SHA-256 before using it.
-2. Installs it with `dpkg` or `rpm`, unless that version is already there. No OpenVox repository stays on the host, so nothing moves the agent past `openvox_version`. Changing that moves it up or down.
+2. Installs it with `apt-get` or `dnf`, unless that version is already there, and only if the file still has the SHA-256 the download checked. Its only dependencies, `findutils` and `tar` (and `systemd` on the Red Hat family), come from the host's own repositories. No OpenVox repository stays on the host, so nothing moves the agent past `openvox_version`. Changing that moves it up or down.
 3. Stops and disables the package's `puppet.service`, which is the daemon that talks to a server. There isn't one here, and `dpkg` would otherwise enable it for the next boot.
 4. With a `manifest_path`, writes `/etc/systemd/system/openvox-apply.service`, a oneshot unit that runs `puppet apply --detailed-exitcodes`.
 5. With a `schedule`, writes and starts `openvox-apply.timer`. A run missed while the host was off happens when it comes back.
@@ -100,7 +100,9 @@ OpenVox also publishes Ubuntu 22.04 and 26.04, Debian 12, and Enterprise Linux 8
 
 ## Requirements
 
-Requires Conn3x v0.29.0 or later and systemd on each host, on x86_64 or aarch64. Each host needs to reach `apt.voxpupuli.org` or `yum.voxpupuli.org`. Applying needs no inbound port.
+Requires Conn3x v0.36.0 or later and systemd on each host, on x86_64 or aarch64. Each host needs to reach `apt.voxpupuli.org` or `yum.voxpupuli.org`. Applying needs no inbound port.
+
+Coming from v0.2.1 or earlier, the first plan swaps the old `command` step for a `package` step: 1 to add, 1 to destroy. With the agent already at `openvox_version`, the apply installs nothing and runs nothing on the host. Every plan after that is clean.
 
 ## Tested on
 
